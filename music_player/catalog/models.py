@@ -24,14 +24,15 @@ class Song(models.Model):
     name = models.CharField(
         max_length=200, help_text=_('Enter a song name'))
     image = models.ImageField(
-        upload_to='cover_image', height_field=100, width_field=100)
+        upload_to='cover_image')
     content = models.FileField(upload_to='songs')
     artist = models.ForeignKey(User, on_delete=models.CASCADE)
     status = models.BooleanField(
         default=False,
         help_text=_('Check this box to make the song public')
     )
-
+    listen_count = models.PositiveIntegerField(default=0)
+    
     def __str__(self):
         """Return song name"""
         return self.name
@@ -39,6 +40,9 @@ class Song(models.Model):
     class Meta:
         ordering = ["name"]
 
+class Download(models.Model):
+    song = models.ForeignKey(Song, on_delete=models.CASCADE)
+    count = models.PositiveIntegerField(default=0)
 
 class Playlist(models.Model):
     name = models.CharField(
